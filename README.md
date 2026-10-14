@@ -1,105 +1,95 @@
-# FarmTech VisionGuard Rural | FIAP Fase 6
+FarmTech VisionGuard Rural | FIAP Fase 6
+Aluno: Pedro Gomes12
+RM: 571446
+Grupo: 60
+Curso: Tecnologia em Inteligência Artificial (On-Line)
+Atividade: Capítulo 1, O Despertar da Rede Neural | Fase 6
 
-**Pedro Vinicius Gomes dos Santos | RM 571446 | Grupo 60**  
-**Projeto:** visão computacional para monitoramento experimental de acessos rurais e comparação científica de modelos de aprendizado profundo.
+Projeto acadêmico executado. As métricas abaixo provêm dos arquivos de resultados do notebook. O experimento foi realizado com rótulos oficiais do Open Images (DEMO_OPENIMAGES_OFFICIAL). A rotulagem manual pelo Make Sense, exigida no enunciado, não está comprovada e permanece pendente. A aplicação rural não foi validada em operação de campo.
 
-O repositório integra **duas entregas acadêmicas** e uma **aplicação rural local**. A aplicação demonstra a viabilidade de detectar pessoas e carros em imagens, gravações e câmeras; as entregas acadêmicas comparam YOLOv5 customizada (30 versus 60 épocas), YOLOv5 padrão COCO e CNN treinada do zero.
+Acesso rápido
+Recurso	Link
+Notebook executado no Google Colab	Abrir notebook
+Notebook versionado neste repositório	Abrir arquivo
+Vídeo demonstrativo (YouTube não listado)	Assistir vídeo
+Repositório público	FarmTech VisionGuard
+Relatório técnico ilustrado	Abrir PDF
+Resultados e limitações	Abrir análise
+Verificação antes da correção: testar o acesso ao Colab e ao vídeo em janela anônima. A publicação do link não garante permissão de visualização.
 
-> **Status de execução:** código e testes locais preparados; os experimentos acadêmicos ainda devem ser executados no Colab e documentados com métricas reais. Nenhuma métrica artificial está sendo apresentada como resultado. O modelo COCO da aplicação não substitui a YOLOv5 customizada da FIAP.
+1. Contexto e problema
+A FarmTech Solutions pretende demonstrar o uso de visão computacional em cenários como segurança patrimonial e acompanhamento de entradas em propriedades rurais. Este projeto cria um protótipo demonstrativo de detecção de pessoas e carros, explorando seu uso em porteiras, acessos e áreas de circulação. Uma detecção indica presença visual e não determina autorização, identidade ou invasão.
 
+2. Objetivo e arquitetura
+Montar um dataset com 80 imagens reais, sendo 40 de person e 40 de car.
+Comparar duas YOLOv5 customizadas com 30 e 60 épocas.
+Comparar ambas a uma YOLOv5 padrão pré-treinada em COCO.
+Treinar e avaliar uma CNN binária do zero.
+Evidenciar os resultados com métricas, curvas e exemplos visuais.
+Disponibilizar um demonstrador local em Windows (app_fazenda.py) para fotos, vídeos e fontes de câmera compatíveis.
+Fluxo científico: imagens e bounding boxes → divisão treino/validação/teste → YOLOv5 e CNN → métricas no teste → análise crítica → protótipo rural. A YOLO detecta e localiza objetos; a CNN classifica a imagem como uma das duas classes. As duas tarefas não devem ser comparadas por uma única métrica.
 
-**APRESENTAÇÃO VISUAL:** abra [`index.html`](index.html) no navegador sem instalar bibliotecas. Esta é uma apresentação estática; o painel de detecção funciona no `app_fazenda.py`.
+3. Dataset e rótulos
+Classe	Treino	Validação	Teste	Total
+Pessoa	32	4	4	40
+Carro	32	4	4	40
+Total	64	8	8	80
+As imagens são oriundas do Open Images, com identificadores e bounding boxes de referência. A amostra de teste tem apenas oito imagens e não é representativa de todas as condições de uma fazenda. Integridade acadêmica: o estado registrado no pacote é DEMO_OPENIMAGES_OFFICIAL; não afirmar que as 64 imagens de treino foram manualmente anotadas no Make Sense sem evidências. Uma etapa posterior deve exportar os rótulos manualmente no formato YOLO e repetir os treinamentos para satisfazer integralmente o requisito.
 
-## Abra primeiro
+4. Resultados quantitativos observados
+Modelo	mAP@50	Precision*	Recall*	Tempo médio de inferência	Treinamento
+YOLOv5 custom, 30 épocas	76,25%	0,31%	100%	86,48 ms	89,00 s
+YOLOv5 custom, 60 épocas	89,58%	2,25%	100%	26,86 ms	104,46 s
+YOLOv5 padrão COCO	87,50%	5,23%	100%	23,96 ms	não aplicado
+CNN do zero	não aplicável	0%	0%	20,43 ms	9,98 s
+CNN: accuracy = 50%, macro-F1 = 33,33%. O AP@50 por classe da YOLO 60 foi 79,17% (person) e 100% (car). Os arquivos de origem estão em results/*.json.
 
-**Nova edição explicativa com painel profissional e guia completo:** [Manual passo a passo](docs/PASSO_A_PASSO_COMPLETO.md) | [PDF ilustrado](docs/GUIA_COMPLETO_FARMTECH_FIAP.pdf).
+* A avaliação de detecção utilizou um limiar de confiança bastante baixo, podendo incluir numerosos falsos positivos. Os valores de precision/recall do ponto operacional não são equivalentes ao mAP, que resume uma curva de precisão e recall. A comparação de tempos também é indicativa, pois difere conforme carregamento, contexto e hardware.
 
-- [Instruções de instalação e fluxo completo](COMECE_AQUI.md)
-- [Guia da aplicação rural](docs/GUIA_FAZENDA_APLICACAO.md)
-- [Matriz requisito por requisito do enunciado](docs/MATRIZ_ENUNCIADO_OFICIAL.md)
-- [Plano de validação em campo](docs/VALIDACAO_EM_CAMPO.md)
-- [Status de testes e pendências](docs/STATUS_VERIFICADO.md)
+5. Interpretação crítica
+A YOLO customizada com 60 épocas obteve maior mAP@50 nesta amostra (+13,33 pontos percentuais em relação a 30 épocas). Entretanto, o conjunto de teste com apenas oito imagens produz alta instabilidade estatística. A precision muito baixa sugere excesso de previsões de baixa confiança e exige reavaliação em um limiar operacional. A CNN treinada do zero apresentou apenas 50% de accuracy; a hipótese de classificação confiável não foi corroborada. Nenhum resultado comprova prontidão de segurança operacional em fazendas.
 
-## Aplicação para uso local na fazenda
+6. Estrutura do repositório
+.
+├── README.md
+├── PedroViniciusGomesdosSantos_rm571446_pbl_fase6.ipynb
+├── app_fazenda.py
+├── INICIAR_FAZENDA_WINDOWS.bat
+├── index.html
+├── dataset_80_imagens_e_rotulos.zip
+├── results/             # métricas JSON, CSV e figuras reais
+├── reports/             # relatório técnico completo em PDF
+├── docs/                # metodologia e instruções
+├── src/                 # avaliação e utilitários acadêmicos
+├── scripts/             # auditoria, dataset e relatórios
+├── operacao_rural/       # ingestão de câmera, detecção, eventos e SQLite
+└── tests/               # testes automatizados, quando presentes
+7. Como reproduzir os experimentos
+Abra o notebook do Colab e confirme que tem permissão de visualização.
+Utilize GPU no Colab e monte o Drive, conforme as células do notebook.
+Preserve as partições e a ordem de classes definidas no projeto.
+Para cumprimento literal do enunciado, rotule manualmente as 64 imagens de treino no Make Sense, exporte para YOLO, audite as labels e só então execute novamente os treinamentos.
+Execute os experimentos, analise os registros e compare os resultados nas mesmas oito imagens de teste.
+Confira as curvas e as imagens de teste processadas no notebook e em results/.
+Evite executar novamente um notebook só para reproduzir números sem fixar versões, seed e dataset. O registro do ambiente consta em results/runtime_metadata.json.
 
-No Windows, extraia o ZIP e execute **`INICIAR_FAZENDA_WINDOWS.bat`**. Na primeira execução, conexão com Internet é necessária para instalar dependências e obter os pesos públicos. O navegador acessa `http://127.0.0.1:8501`.
+8. Demonstração rural no Windows
+Pré-requisito recomendado: Python 3.11, acesso à Internet para instalar as bibliotecas e obter os pesos. Na pasta do projeto execute INICIAR_FAZENDA_WINDOWS.bat. O aplicativo Streamlit abre normalmente em http://127.0.0.1:8501. A opção com modelo COCO é um modo de demonstração; para usar o detector customizado, configure os pesos best.pt gerados no treinamento. O sistema oferece entrada de imagens, arquivos de vídeo, captura webcam/RTSP, zona de interesse e histórico local SQLite.
 
-**Recursos:** análise de fotos; processamento de vídeos e download AVI; captura de webcam e RTSP; zonas configuráveis; detecções reais com `person/car`; armazenamento SQLite local, imagens dos eventos e exportação CSV.
+Limites: o aplicativo não identifica indivíduos nem autoriza entradas; não foi ensaiado em produção e não substitui vigilância humana. Uma câmera rural requer validação com vídeos próprios, análise de falsos alarmes, proteção de credenciais e política de retenção de imagens.
 
-**Motor de inferência:**
-
-| Modo | Origem dos pesos | Finalidade |
-|---|---|---|
-| YOLO11n COCO | pesos públicos baixados no primeiro uso | demonstração imediata, não comprovante da FIAP |
-| YOLOv5 customizada | `models/best.pt`, somente após treinamento real | demonstrar o modelo desenvolvido na FIAP |
-
-**Limitações:** não identifica pessoas, placas, permissões nem invasões; não controla porteiras ou alarmes; a atualização depende do hardware. O painel está vinculado à interface local por padrão e não possui autenticação para publicação pública. Segurança real requer validação no local e infraestrutura apropriada.
-
-## Dataset acadêmico
-
-Duas classes: **pessoa (`person`) e automóvel (`car`)**, com 40 fotografias por classe do Open Images e seleção reprodutível por `ImageID`.
-
-| Classe | Treino | Validação | Teste | Total |
-|---|---:|---:|---:|---:|
-| Pessoa | 32 | 4 | 4 | 40 |
-| Carro | 32 | 4 | 4 | 40 |
-| **Total** | **64** | **8** | **8** | **80** |
-
-As **64 imagens de treino devem ser rotuladas manualmente no Make Sense**. O script de auditoria não permite promover labels com discrepâncias acima do limite configurado. As referências do Open Images são preservadas para validação e teste. Os diretórios de imagens são criados somente quando o download real termina.
-
-## Colab e experimento obrigatório
-
-**Notebook:** [`notebooks/PedroGomes_rm571446_pbl_fase6.ipynb`](notebooks/PedroGomes_rm571446_pbl_fase6.ipynb)
-
-**Link público do Colab executado:** `INSIRA_URL_PUBLICA_DO_COLAB`
-
-O notebook explica o dataset, faz controle de integridade, apresenta os dois treinamentos YOLOv5 (30 e 60 épocas), compara a YOLOv5 padrão, treina a CNN do zero, mede precisão/recall/F1/mAP50 e tempos, apresenta curvas, exemplos e conclusões. mAP de localização e acurácia de classificação não são tratados como equivalentes.
-
-**Notebook extra (opcional):** [`ir_alem/PedroGomes_rm571446_ir_alem_fase6.ipynb`](ir_alem/PedroGomes_rm571446_ir_alem_fase6.ipynb), com MobileNetV2 transfer learning/fine-tuning e segmentação DeepLabV3. **Não considerar concluído antes de executar.**
-
-## Repositório e demonstração
-
-**Link do repositório GitHub público:** `INSIRA_URL_DO_GITHUB`
-
-**Vídeo do YouTube não listado (até 5 minutos):** `INSIRA_URL_DO_VIDEO`
-
-Insira URLs verdadeiras após a publicação e antes de executar o verificador. Não faça novos commits após o horário limite informado pela FIAP. Consulte [`docs/ROTEIRO_VIDEO.md`](docs/ROTEIRO_VIDEO.md) para a demonstração.
-
-## Estrutura essencial
-
-```text
-FarmTech_VisionGuard/
-  app_fazenda.py                 # painel local
-  INICIAR_FAZENDA_WINDOWS.bat   # instalação e início Windows
-  operacao_rural/               # YOLO, SQLite, frame/zone/evento
-  models/                       # insira best.pt treinado (não incluso)
-  notebooks/                    # entregas FIAP
-  ir_alem/                      # entrega opcional
-  scripts/                      # download, Make Sense, relatórios, auditoria
-  dataset/                      # estrutura do dataset (80 fotos após download)
-  results/                      # métricas reais após executar Colab
-  tests/                        # testes automatizados da lógica
-  docs/                         # metodologia e manuais
-```
-
-## Verificação e integridade
-
-No diretório raiz:
-
-```bash
-python -m pytest -q
-python -m compileall -q src scripts operacao_rural app_fazenda.py
-python scripts/verificar_ambiente.py
-python scripts/check_submission.py --root . --dataset dataset
-```
-
-O último comando **DEVE informar pendências** antes de Make Sense, execução real do notebook, geração de métricas e publicação dos links. A verificação de código e os testes de componentes não constituem evidência de mAP ou FPS real de câmera.
-
-## Referências técnicas
-
-- Open Images: https://storage.googleapis.com/openimages/web/download.html
-- YOLOv5: https://github.com/ultralytics/yolov5
-- Ultralytics YOLO: https://docs.ultralytics.com/
-- Make Sense: https://www.makesense.ai/
-- TensorFlow/Keras: https://www.tensorflow.org/
-- PyTorch: https://pytorch.org/
+9. Principais limitações e próximos passos
+Rotulagem manual obrigatória no Make Sense não comprovada.
+Apenas oito imagens de teste; generalização limitada.
+Classes genéricas pessoa/carro não cobrem caminhões, motocicletas, tratores ou cenários noturnos.
+Precision em limiar baixo requer avaliação adicional com limiar operacional e F1.
+CNN do zero não apresentou discriminação confiável.
+Ausência de validação independente de câmera, estabilidade 24/7 e segurança operacional.
+10. Referências
+Open Images
+YOLOv5
+Ultralytics
+Make Sense
+PyTorch
+TensorFlow
+Autor: Pedro Gomes12 · RM 571446 · Grupo 60 · FIAP, Fase 6. Resultados derivados de artefatos executados, sem métricas inventadas.
