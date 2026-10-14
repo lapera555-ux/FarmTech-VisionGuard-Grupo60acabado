@@ -1,0 +1,9 @@
+# Template. O notebook gera uma versão absoluta em /content/farmtech.yaml.
+path: ../dataset
+train: images/train
+val: images/val
+test: images/test
+
+names:
+  0: person
+  1: car

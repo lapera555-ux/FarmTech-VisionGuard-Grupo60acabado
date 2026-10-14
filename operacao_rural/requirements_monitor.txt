@@ -1,0 +1,5 @@
+opencv-python>=4.8,<5
+torch>=2,<3
+torchvision>=0.15,<1
+pandas>=2,<3
+streamlit>=1.30,<2

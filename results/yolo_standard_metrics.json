@@ -1,0 +1,11 @@
+{
+  "precision": 0.05228758169934641,
+  "recall": 1.0,
+  "f1": 0.09937888198757763,
+  "map50": 0.875,
+  "ap50_person": 0.75,
+  "ap50_car": 1.0,
+  "mean_inference_ms": 23.95983362499976,
+  "num_images": 8,
+  "training_seconds": 0.0
+}

@@ -1,0 +1,12 @@
+{
+  "accuracy": 0.5,
+  "precision": 0.0,
+  "recall": 0.0,
+  "f1": 0.0,
+  "macro_precision": 0.25,
+  "macro_recall": 0.5,
+  "macro_f1": 0.3333333333333333,
+  "mean_inference_ms": 20.43349687501461,
+  "training_seconds": 9.97991062199992,
+  "num_images": 8
+}

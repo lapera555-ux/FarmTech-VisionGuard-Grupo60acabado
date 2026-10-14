@@ -1,0 +1,7 @@
+# Pacote de execução local. A versão do modelo é identificada na interface.
+streamlit>=1.40,<2
+ultralytics>=8.3,<9
+opencv-python>=4.8,<5
+numpy>=1.24,<3
+pandas>=2,<3
+Pillow>=10,<13
